@@ -21,8 +21,14 @@ class CryptoList extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 20.0),
             child: Row(
               children: [
-                FlutterLogo(
-                  size: 50,
+                Image.network(
+                  'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
+                  height: 50,
+                  width: 50,
+                  fit: BoxFit.cover,
+                ),
+                SizedBox(
+                  width: 10,
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -36,15 +42,20 @@ class CryptoList extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      "Ethereum",
+                      controller.cryptoList[index].name,
                       style: TextStyle(
                           fontSize: 15,
                           color: const Color.fromARGB(255, 95, 95, 95)),
                     ),
                   ],
                 ),
+                SizedBox(
+                  width: 5,
+                ),
                 Image.asset(
-                  "assets/high.png",
+                  controller.cryptoList[index].percent <= 0
+                      ? "assets/low.png"
+                      : "assets/high.png",
                   width: 70,
                 ),
                 Spacer(),
@@ -52,7 +63,7 @@ class CryptoList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      "\$3,800 USD",
+                      "\$${controller.cryptoList[index].price.toInt()} USD",
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                     ),
@@ -60,10 +71,12 @@ class CryptoList extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      "+3.2%",
+                      "${double.parse(controller.cryptoList[index].percent.toStringAsFixed(2))} %",
                       style: TextStyle(
                           fontSize: 15,
-                          color: Colors.red,
+                          color: controller.cryptoList[index].percent <= 0
+                              ? Colors.red
+                              : Colors.green,
                           fontWeight: FontWeight.w600),
                     ),
                   ],

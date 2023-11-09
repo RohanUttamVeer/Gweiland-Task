@@ -107,8 +107,14 @@ class HomePage extends GetView<HomeController> {
                           left: 20.0, right: 20, top: 40, bottom: 20),
                       child: Row(
                         children: [
-                          FlutterLogo(
-                            size: 40,
+                          Image.network(
+                            'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
+                            height: 50,
+                            width: 50,
+                            fit: BoxFit.cover,
+                          ),
+                          SizedBox(
+                            width: 10,
                           ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,41 +185,23 @@ class HomePage extends GetView<HomeController> {
               SizedBox(
                 height: 20,
               ),
-              CryptoList(
-                controller: controller,
+              Obx(
+                () => controller.isLoading.value
+                    ? Center(
+                        child: SizedBox(
+                          height: 50,
+                          width: 50,
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : CryptoList(
+                        controller: controller,
+                      ),
               ),
             ],
           ),
         ),
       ),
-      // bottomNavigationBar: Container(
-      //   decoration: BoxDecoration(borderRadius: BorderRadius.circular(100)),
-      //   child: NavigationBar(
-      //     onDestinationSelected: (int index) {
-      //       // setState(() {
-      //       //   currentPageIndex = index;
-      //       // });
-      //     },
-      //     indicatorColor: Colors.amber[800],
-      //     selectedIndex: controller.currentPageIndex.value,
-      //     destinations: const <Widget>[
-      //       NavigationDestination(
-      //         selectedIcon: Icon(Icons.home),
-      //         icon: Icon(Icons.home_outlined),
-      //         label: 'Home',
-      //       ),
-      //       NavigationDestination(
-      //         icon: Icon(Icons.business),
-      //         label: 'Business',
-      //       ),
-      //       NavigationDestination(
-      //         selectedIcon: Icon(Icons.school),
-      //         icon: Icon(Icons.school_outlined),
-      //         label: 'School',
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 }

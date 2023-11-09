@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:gweiland_task/home_module/controller/home_controller.dart';
 import 'home_module/bindings/home_binding.dart';
-import 'home_module/view/pages/home_page.dart';
+import 'home_module/view/pages/bottom_nav.dart';
 
 void main() {
   runApp(const GweilandTask());
@@ -20,7 +19,7 @@ class GweilandTask extends StatelessWidget {
         scaffoldBackgroundColor: Colors.white,
       ),
       initialBinding: HomeBinding(),
-      home: HomePage(),
+      home: HomeNav(),
     );
   }
 }
