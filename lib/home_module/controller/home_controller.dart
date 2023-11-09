@@ -99,7 +99,11 @@ class HomeController extends GetxController {
       if (response.statusCode == 200) {}
       var result = json.decode(response.body);
       for (int i = 0; i < 19; i++) {
-        cryptoList.add(getCrytoData(result['data'][i]));
+        cryptoList.add(getCrytoData(
+          data: await result['data'][i],
+          logo: await getCryptoLogoList(result['data'][i]['id']),
+        ));
+
         print(cryptoList[i].symbol);
       }
       loadingFalse();
@@ -111,12 +115,15 @@ class HomeController extends GetxController {
     }
   }
 
-  getCrytoData(var data) {
+  getCrytoData({
+    required var data,
+    required logo,
+  }) {
     return CryptoModel(
       id: data['id'],
       symbol: data['symbol'],
       name: data['name'],
-      // logo:  getCryptoLogoList(data['id']).toString(),
+      logo: logo,
       price: data['quote']['USD']['price'],
       cmc: data['cmc_rank'],
       percent: data['quote']['USD']['percent_change_24h'],

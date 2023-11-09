@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:gweiland_task/home_module/view/widgets/cryptoList.dart';
+import 'package:gweiland_task/home_module/view/widgets/crypto_list.dart';
 import '../../controller/home_controller.dart';
 
 class HomePage extends GetView<HomeController> {

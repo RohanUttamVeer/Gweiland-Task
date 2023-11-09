@@ -22,7 +22,7 @@ class CryptoList extends StatelessWidget {
             child: Row(
               children: [
                 Image.network(
-                  'https://s2.coinmarketcap.com/static/img/coins/64x64/1.png',
+                  controller.cryptoList[index].logo,
                   height: 50,
                   width: 50,
                   fit: BoxFit.cover,
