@@ -1,8 +1,14 @@
+import 'dart:collection';
+import 'dart:convert';
+
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+
+import '../model/crypto_model.dart';
 
 class HomeController extends GetxController {
-
-  static HomeController instance = Get.find();
+  // static HomeController instance = Get.find();
+  late http.Client client;
 
   @override
   void onInit() {
@@ -27,5 +33,79 @@ class HomeController extends GetxController {
 
   clearControllers() {
     isLoading(false);
+  }
+
+  var cryptoList = List<CryptoModel>.empty(growable: true).obs;
+  var cryptoLogo = List<String>.empty(growable: true).obs;
+
+  getCryptoLogoList(var id) async {
+    loadingTrue();
+    var api = "https://pro-api.coinmarketcap.com/v2/cryptocurrency/info";
+    Map<String, String> headers = new HashMap();
+    headers = {
+      "Accept": "*/*",
+      "Content-Type": "keep-alive",
+      "X-CMC_PRO_API_KEY": "ccadff55-953f-4df5-84a7-dbd71b181def",
+    };
+    final queryParameters = {
+      'id': id,
+    };
+    var endpointUrl = (api);
+    var queryString =
+        Uri.parse(endpointUrl).replace(queryParameters: queryParameters).query;
+    var requestUrl = endpointUrl + '?' + queryString;
+    try {
+      final response = await client.get(
+        Uri.parse(requestUrl),
+        headers: headers,
+      );
+      if (response.statusCode == 200) {
+        var result = json.decode(response.body);
+        return result['data']['$id']['logo'];
+      } else {
+        return 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS29lMSBCAjQxTR0YqRlx6VFwmFQQ1N-EiQGA&usqp=CAU';
+      }
+    } catch (e) {
+      print(e);
+      loadingFalse();
+    }
+  }
+
+  getCryptoList() async {
+    loadingTrue();
+    var api =
+        "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest";
+    Map<String, String> headers = new HashMap();
+    headers = {
+      "Accept": "*/*",
+      "Content-Type": "keep-alive",
+      "X-CMC_PRO_API_KEY": "ccadff55-953f-4df5-84a7-dbd71b181def",
+    };
+    try {
+      final response = await client.post(
+        Uri.parse(api),
+        headers: headers,
+      );
+      if (response.statusCode == 200) {}
+      var result = json.decode(response.body);
+      for (int i = 0; i < 19; i++) {
+        cryptoList.add(getCrytoData(result['data'][i]));
+      }
+    } catch (e) {
+      print(e);
+      loadingFalse();
+    }
+  }
+
+  getCrytoData(var data) async {
+    return CryptoModel(
+      id: data['id'],
+      symbol: data['symbol'],
+      name: data['name'],
+      logo: await getCryptoLogoList(data['id']),
+      price: data['quote']['USD']['price'],
+      cmc: data['cmc_rank'],
+      percent: data['quote']['USD']['percent_change_24h'],
+    );
   }
 }
